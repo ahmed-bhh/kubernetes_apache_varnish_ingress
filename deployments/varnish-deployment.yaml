@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: varnish
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: varnish
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: varnish
+    spec:
+      volumes:
+        - name: varnish-config-volume
+          configMap:
+            name: varnish-config
+      containers:
+        - name: varnish
+          image: varnish
+          imagePullPolicy: Always
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - name: varnish-config-volume
+              mountPath: /etc/varnish
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+

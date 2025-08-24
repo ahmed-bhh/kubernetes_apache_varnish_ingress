@@ -1,0 +1,12 @@
+apiVersion: v1               
+kind: Service               
+metadata:
+  name: apache-service       
+spec:
+  selector:
+    app: apache             
+  ports:
+    - protocol: TCP          
+      port: 80               # Port du Service dans le cluster (IP interne)
+      targetPort: 80         # Port sur lequel le conteneur Apache écoute
+
