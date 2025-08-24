@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.varnish.configMap.name }}
+data:
+  default.vcl: |
+    vcl 4.0;
+
+    backend default {
+        .host = "{{ .Values.varnish.configMap.backendHost }}";
+        .port = "{{ .Values.varnish.configMap.backendPort }}";
+    }
+
+    sub vcl_recv {
+        return (hash);
+    }
+

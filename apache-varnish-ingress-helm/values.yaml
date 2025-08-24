@@ -12,6 +12,7 @@ image:
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
+  ###########varniiiiishhhh deployment+service+configmap############
 varnish:
   replicas: 1
   image:
@@ -32,7 +33,11 @@ varnish:
     port: 80
     targetPort: 80
   selectorApp: varnish
-  
+  configMap:
+    name: varnish-config
+    backendHost: apache-service
+    backendPort: 80
+    ########apaachee#######
 apache:
   service:
     name: apache-service
