@@ -7,3 +7,8 @@
 - Création d’une ConfigMap pour configurer Varnish afin qu’il redirige les requêtes vers Apache.  
 - Passage du service Varnish en ClusterIP avant d’ajouter l’Ingress (j’ai testé en le laissant en NodePort, ça fonctionne aussi mais c’est moins sécurisé).  
 - Installation et test de l’Ingress, avec un flux fonctionnel : Ingress  => Varnish => Apache  .
+
+## Doing
+- expérimentation avec Helm pour simplifier le déploiement et la gestion des charts Kubernetes.
+
+
