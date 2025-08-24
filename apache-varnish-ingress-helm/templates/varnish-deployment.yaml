@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: varnish
+spec:
+  replicas: {{ .Values.varnish.replicas }}
+  selector:
+    matchLabels:
+      app: varnish
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: varnish
+    spec:
+      volumes:
+        - name: varnish-config-volume
+          configMap:
+            name: {{ .Values.varnish.configMapName }}
+      containers:
+        - name: varnish
+          image: "{{ .Values.varnish.image.repository }}:{{ .Values.varnish.image.tag }}"
+          imagePullPolicy: {{ .Values.varnish.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.varnish.resources | nindent 12 }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - name: varnish-config-volume
+              mountPath: /etc/varnish
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+
