@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.varnish.service.name }}
+spec:
+  type: {{ .Values.varnish.service.type }}
+  selector:
+    app: {{ .Values.varnish.selectorApp }}
+  ports:
+    - port: {{ .Values.varnish.service.port }}
+      targetPort: {{ .Values.varnish.service.targetPort }}
+
