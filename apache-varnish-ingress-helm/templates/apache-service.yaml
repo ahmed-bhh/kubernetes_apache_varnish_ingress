@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.apache.service.name }}
+spec:
+  type: {{ .Values.apache.service.type }}
+  selector:
+    app: {{ .Values.apache.selectorApp }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.apache.service.port }}
+      targetPort: {{ .Values.apache.service.targetPort }}
+
