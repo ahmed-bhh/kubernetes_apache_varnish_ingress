@@ -17,24 +17,20 @@ spec:
       labels:
         app: varnish
     spec:
-      volumes:
-        - name: varnish-config-volume
-          configMap:
-            name: {{ .Values.varnish.configMapName }}
       containers:
         - name: varnish
           image: "{{ .Values.varnish.image.repository }}:{{ .Values.varnish.image.tag }}"
           imagePullPolicy: {{ .Values.varnish.image.pullPolicy }}
           resources:
             {{- toYaml .Values.varnish.resources | nindent 12 }}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
           volumeMounts:
             - name: varnish-config-volume
               mountPath: /etc/varnish
+      volumes:
+        - name: varnish-config-volume
+          configMap:
+            name: {{ .Values.varnish.configMap.name }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
       terminationGracePeriodSeconds: 30
 

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.apache.configMap.name }}
+data:
+  index.html: |-
+    {{ .Values.apache.configMap.indexHtml | nindent 4 }}
+

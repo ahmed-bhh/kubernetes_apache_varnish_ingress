@@ -12,6 +12,23 @@ image:
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
+  
+#####ingresss#####
+ingress:
+  enabled: true
+  name: varnish-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: myapp-helm.local
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            serviceName: varnish-service
+            servicePort: 80
+
+
   ###########varniiiiishhhh deployment+service+configmap############
 varnish:
   replicas: 1
@@ -19,7 +36,6 @@ varnish:
     repository: varnish
     tag: latest
     pullPolicy: Always
-  configMapName: varnish-config
   resources:
     limits:
       cpu: 500m
@@ -36,15 +52,35 @@ varnish:
   configMap:
     name: varnish-config
     backendHost: apache-service
-    backendPort: 80
-    ########apaachee#######
+    backendPort: "80"
+#######apacheee#######
 apache:
+  replicas: 1
+  image:
+    repository: httpd
+    tag: 2.4
+    pullPolicy: Always
   service:
     name: apache-service
     type: ClusterIP
     port: 80
     targetPort: 80
   selectorApp: apache
+  configMap:
+    name: apache-index
+    indexHtml: |
+      <html>
+      <head><title>Apache Test</title></head>
+      <body>
+        <h1>Apache Server via Helm</h1>
+      </body>
+      </html>
+
+
+
+
+
+
 
 
 
@@ -95,21 +131,6 @@ service:
   port: 80
 
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
